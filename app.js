@@ -31,7 +31,7 @@ app.post('/', (req, res) => {
     latitude,
     longitude,
     mapURI,
-    ip: req.connection.remoteAddress,
+    ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
   });
   ipData.save((err) => {
     if (err) {
